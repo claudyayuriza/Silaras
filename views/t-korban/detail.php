@@ -7,8 +7,8 @@ use yii\widgets\DetailView;
 /** @var app\models\TKorban $model */
 
 // $this->title = $model->id_korban;
-$this->title = $model->nama_korban;
-$this->params['breadcrumbs'][] = ['label' => 'T-Korban', 'url' => ['index']];
+$this->title = 'Nama Korban: ' . $model->nama_korban;
+$this->params['breadcrumbs'][] = ['label' => 'Detail Kasus', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -31,30 +31,60 @@ $this->params['breadcrumbs'][] = $this->title;
                         <table class="table table-bordered">
                             <tbody>
                                 <tr>
-                                    <td><b>No Registrasi</b></td>
+                                    <td><b>No Registrasi Kasus</b></td>
                                     <td>
                                         <?php
-                                            $rgtr = $model->datakasus ? $model->datakasus->no_register : '-';
-                                            echo $rgtr;
+                                        $rgtr = $model->datakasus ? $model->datakasus->no_register : '-';
+                                        echo $rgtr;
                                         ?>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Kategori</b></td>
+                                    <td><b>Tanggal Kejadian</b></td>
+                                    <!-- <td><= $model->tanggal_kejadian ?></td> -->
+                                    <td>
+                                        <?php
+                                        $tgl_kjd = $model->datakasus ? $model->datakasus->tanggal_kejadian : '-';
+                                        $tanggal_indo = $model->tglIndo($tgl_kjd);
+                                        echo $tanggal_indo;
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>Tanggal Pelaporan</b></td>
+                                    <!-- <td><= $model->tanggal_pelaporan ?></td> -->
+                                    <td>
+                                        <?php
+                                        $tgl_plrn = $model->datakasus ? $model->datakasus->tanggal_pelaporan : '-';
+                                        $tanggal_indo = $model->tglIndo($tgl_plrn);
+                                        echo $tanggal_indo;
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>Kategori Kasus</b></td>
                                     <!-- <td><= $model->kategori_kasus ?></td> -->
                                     <td>
-                                        <?php 
-                                            $kategori_kasus = $model->kategori ? $model->kategori->nama_kategori: '-';
-                                            echo $kategori_kasus;
+                                        <?php
+                                        $kategori_kasus = $model->kategori ? $model->kategori->nama_kategori : '-';
+                                        echo $kategori_kasus;
                                         ?>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>TKP</b></td>
+                                    <td><b>Status Kasus</b></td>
+                                    <!-- <td><= $model->tanggal_pelaporan ?></td> -->
                                     <td>
                                         <?php
-                                            $tkp = $model->datakasus ? $model->datakasus->tkp : '-';
-                                            echo $tkp;
+                                        $stakas = $model->datakasus ? $model->datakasus->status_kasus : '-';
+                                        if ($stakas == 1) {
+                                            $stakas = '<span class="badge badge-warning">Diproses</span>';
+                                        } elseif ($stakas == 2) {
+                                            $stakas = '<span class="badge badge-success">Selesai</span>';
+                                        } else {
+                                            $stakas = '';
+                                        }
+                                        echo $stakas;
                                         ?>
                                     </td>
                                 </tr>
@@ -65,33 +95,38 @@ $this->params['breadcrumbs'][] = $this->title;
                         <table class="table table-bordered">
                             <tbody>
                                 <tr>
-                                    <td><b>Tanggal Kejadian</b></td>
-                                    <!-- <td><= $model->tanggal_kejadian ?></td> -->
-                                    <td>
-                                        <?php 
-                                            $tgl_kjd = $model->datakasus ? $model->datakasus->tanggal_kejadian : '-';
-                                            $tanggal_indo = $model->tglIndo($tgl_kjd);
-                                            echo $tanggal_indo;
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><b>Tanggal Pelaporan</b></td>
-                                    <!-- <td><= $model->tanggal_pelaporan ?></td> -->
-                                    <td>
-                                        <?php 
-                                            $tgl_plrn = $model->datakasus ? $model->datakasus->tanggal_pelaporan : '-';
-                                            $tanggal_indo = $model->tglIndo($tgl_plrn);
-                                            echo $tanggal_indo;
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><b>Deskripsi</b></td>
+                                    <td><b>Kab/Kota</b></td>
                                     <td>
                                         <?php
-                                            $deskripsi = $model->datakasus ? $model->datakasus->deskripsi_kasus : '-';
-                                            echo $deskripsi;
+                                        $kota = $model->datakasus ? $model->datakasus->kab_kota : '-';
+                                        echo $kota;
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>Desa Kelurahan</b></td>
+                                    <td>
+                                        <?php
+                                        $desa_kelurahan = $model->datakasus ? $model->datakasus->desa_kelurahan : '-';
+                                        echo $desa_kelurahan;
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>TKP</b></td>
+                                    <td>
+                                        <?php
+                                        $tkp = $model->datakasus ? $model->datakasus->tkp : '-';
+                                        echo $tkp;
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>Deskripsi kasus</b></td>
+                                    <td>
+                                        <?php
+                                        $deskripsi = $model->datakasus ? $model->datakasus->deskripsi_kasus : '-';
+                                        echo $deskripsi;
                                         ?>
                                     </td>
                                 </tr>
@@ -105,7 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 
-    <!-- <= DetailView::widget([
+<!-- <= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id_korban',
@@ -125,5 +160,3 @@ $this->params['breadcrumbs'][] = $this->title;
             'update_by',
         ],
     ]) ?> -->
-
-

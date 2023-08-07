@@ -66,10 +66,10 @@ class TKorban extends \yii\db\ActiveRecord
             'alamat_korban' => 'Alamat Korban',
             'no_hp' => 'No Hp',
             'id_kasus' => 'Id Kasus',
-            'create_at' => 'Create At',
-            'update_at' => 'Update At',
-            'create_by' => 'Create By',
-            'update_by' => 'Update By',
+            // 'create_at' => 'Create At',
+            // 'update_at' => 'Update At',
+            // 'create_by' => 'Create By',
+            // 'update_by' => 'Update By',
         ];
     }
 
@@ -77,17 +77,17 @@ class TKorban extends \yii\db\ActiveRecord
     {
         $bulan = array(
             1 => 'Januari',
-                'February',
-                'Maret',
-                'April',
-                'Mei',
-                'Juni', 
-                'Juli',
-                'Agustus', 
-                'September',
-                'Oktober',
-                'November',
-                'Desember',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember',
         );
 
         $pecahkan = explode('-', $tanggal);
@@ -95,18 +95,20 @@ class TKorban extends \yii\db\ActiveRecord
         return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
     }
 
-    public function getdatakasus(){
-        return $this->hasOne(TKasus::className(),['id_kasus'=>'id_kasus']);
+    public function getdatakasus()
+    {
+        return $this->hasOne(TKasus::className(), ['id_kasus' => 'id_kasus']);
     }
 
-    public function gedatakorban(){
-        $data = TKorban ::find()-> all();
-        $dropDown = \yii\helpers\ArrayHelper::map($data, 'id_korban','nama_korban');
+    public function gedatakorban()
+    {
+        $data = TKorban::find()->all();
+        $dropDown = \yii\helpers\ArrayHelper::map($data, 'id_korban', 'nama_korban');
         return $dropDown;
     }
 
-    public function getKategori(){
-        return $this->hasOne(Kategori::className(),['id_kategori'=>'id_korban']);
+    public function getKategori()
+    {
+        return $this->hasOne(Kategori::className(), ['id_kategori' => 'id_korban']);
     }
-
 }

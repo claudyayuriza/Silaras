@@ -10,16 +10,17 @@ use yii\grid\GridView;
 /** @var app\models\TKasusSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'T-Kasus';
+$this->title = 'Data Kasus';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tkasus-index">
 
-        <?php // echo = Html::a('Create T Kasus', ['create'], ['class' => 'btn btn-success']) ?>
+    <?php // echo = Html::a('Create T Kasus', ['create'], ['class' => 'btn btn-success']) 
+    ?>
 
     <div class="card card-outline card-info">
         <div class="card-body">
-        <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+            <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
@@ -40,40 +41,51 @@ $this->params['breadcrumbs'][] = $this->title;
                     // 'kategori_kasus',
                     [
                         'attribute' => 'kategori_kasus',
-                        'label'=>'No. Reg / Jenis Kasus',
+                        'label' => 'No. Reg / Jenis Kasus',
                         'format' => 'raw',
-                        'value'=>function($model){
+                        'value' => function ($model) {
                             $reg = $model->no_register;
                             $jenis = $model->kategori ? $model->kategori->nama_kategori : '-';
-                            return 'No. Reg : '.'<b>'.$reg.'</b>'. '<br>' . 'Jenis : '.'<b>'.$jenis.'</b>';
+                            return 'No. Reg : ' . '<b>' . $reg . '</b>' . '<br>' . 'Jenis : ' . '<b>' . $jenis . '</b>';
                         }
                     ],
                     // 'tanggal_pelaporan',
                     // [
                     //     'attribute' => 'tanggal_pelaporan',
                     //     'label' => 'Tanggal Pelaporan',
-                    //     'value' =>function($model) {
+                    //     'value' => function ($model) {
                     //         $tanggal_pelaporan = date('d-m-Y', strtotime($model->tanggal_pelaporan));
                     //         $tanggal_indo = $model->tglIndo($tanggal_pelaporan);
                     //         return $tanggal_indo;
                     //     }
                     // ],
                     // 'deskripsi_kasus:ntext',
-                    
-                    
+
+
                     // 'tanggal_kejadian',
                     [
                         'attribute' => 'tanggal_kejadian',
                         'label' => 'Tanggal',
                         'format' => 'raw',
-                        'value' =>function($model) {
+                        'value' => function ($model) {
                             $tanggal_kejadian = date('d-m-Y', strtotime($model->tanggal_kejadian));
                             $tanggal_pelaporan = date('d-m-Y', strtotime($model->tanggal_pelaporan));
-                            return 'Kejadian : '.'<b>'.$tanggal_kejadian.'</b>'. '<br>' . 'Pelaporan : '.'<b>'.$tanggal_pelaporan.'</b>';
+                            return 'Kejadian : ' . '<b>' . $tanggal_kejadian . '</b>' . '<br>' . 'Pelaporan : ' . '<b>' . $tanggal_pelaporan . '</b>';
                         }
                     ],
                     'deskripsi_kasus:ntext',
-                    'tkp',
+                    // 'tkp',
+                    [
+                        'attribute' => 'tkp',
+                        'label' => 'TKP',
+                        'format' => 'html',
+                        'value' => function ($model) {
+                            $tkp_p = $model->tkp;
+                            $desalurah = $model->desa_kelurahan;
+                            $kabkot = $model->kab_kota;
+                            return $tkp_p . '<br> Desa/Keluarahan: <b>' . $desalurah . '</b><br> Kab/Kota: <b>' . $kabkot . '</b>';
+                        }
+                    ],
                     //'desa_kelurahan',
                     //'kab_kota',
                     // [
@@ -89,17 +101,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     // 'status_kasus',
                     [
                         'attribute' => 'status_kasus',
-                        'label'=>'Status Kasus',
+                        'label' => 'Status Kasus',
                         'format' => 'raw',
-                        'value' => function($model){
+                        'value' => function ($model) {
                             $status_kasus = $model->status_kasus;
-                                if ($status_kasus == 1) {
-                                    $status_kasus = '<span class="badge badge-warning">Diproses</span>';
-                                } elseif ($status_kasus == 2) {
-                                    $status_kasus = '<span class="badge badge-success">Selesai</span>';
-                                } else {
-                                    $status_kasus = '';
-                                } 
+                            if ($status_kasus == 1) {
+                                $status_kasus = '<span class="badge badge-warning">Diproses</span>';
+                            } elseif ($status_kasus == 2) {
+                                $status_kasus = '<span class="badge badge-success">Selesai</span>';
+                            } else {
+                                $status_kasus = '';
+                            }
                             return $status_kasus;
                         }
                     ],

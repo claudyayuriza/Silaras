@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\TPelaku $model */
+/** @var app\models\Tandatangan $model */
 
-$this->title = 'Tambah Data Pelaku';
-$this->params['breadcrumbs'][] = ['label' => 'Pelaku', 'url' => ['index']];
+$this->title = 'Tambah Data Penandatangan ';
+$this->params['breadcrumbs'][] = ['label' => 'Tanda tangan', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="tpelaku-create">
+<div class="tandatangan-create">
 
     <!-- <h1><= Html::encode($this->title) ?></h1> -->
 

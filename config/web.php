@@ -6,6 +6,7 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'timeZone' => 'Asia/Jakarta',
+    'language' => 'id_ID',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -30,12 +31,30 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        // 'mailer' => [
+        //     'class' => 'yii\swiftmailer\Mailer',
+        //     // send all mails to a file by default. You have to set
+        //     // 'useFileTransport' to false and configure transport
+        //     // for the mailer to send real emails.
+        //     'useFileTransport' => true,
+        // ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure transport
-            // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport' => false, //jadikan false jika ingin bisa kirim email
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                //'host' => 'simklinik.com',
+                'host' => 'mail.sellerku.id',
+                'username' => 'info@sellerku.id',
+                'password' => 'Info@Sellerku123!',
+                'port' => '465',
+                'encryption' => 'SSL',
+            ],
+            'messageConfig' => [
+                'from' => ['info@sellerku.id' => 'INFO-SELLERKU'], // this is needed for sending emails
+                'charset' => 'UTF-8',
+            ],
+            //'viewPath' => '@common/mail',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -50,15 +69,14 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-            ],
+            'rules' => [],
         ],
     ],
-    'modules' => [ 
-        'user' => [ 
-            'class' => 'amnah\yii2\user\Module', 
-        // set custom module properties here ... 
-        ], 
+    'modules' => [
+        'user' => [
+            'class' => 'amnah\yii2\user\Module',
+            // set custom module properties here ... 
+        ],
     ],
     'params' => $params,
 ];

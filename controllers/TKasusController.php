@@ -61,6 +61,7 @@ class TKasusController extends Controller
         ]);
     }
 
+
     /**
      * Creates a new TKasus model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -94,10 +95,9 @@ class TKasusController extends Controller
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
 
-                $model -> status_kasus = 1; //status = 1 berarti diproses
-
-                $model->save();
-                
+                $model->status_kasus = 1; //status = 1 berarti diproses
+                $model->no_register = $model->generatePendaftaran();
+                $model->save(false);
                 return $this->redirect(['view', 'id_kasus' => $model->id_kasus]);
             }
         } else {
@@ -109,6 +109,94 @@ class TKasusController extends Controller
         ]);
     }
 
+    public function actionRekapKasusBulanan()
+    {
+        $searchModel = new TKasusSearch();
+
+        $searchModel->tahun = Yii::$app->request->get('tahun', date('Y'));
+        $searchModel->bulan = Yii::$app->request->get('bulan', date('m'));
+
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $rekap = TKasus::find()
+            ->where(['month(tanggal_pelaporan)' => $searchModel->bulan])
+            ->andWhere(['year(tanggal_pelaporan)' => $searchModel->tahun])
+            ->all();
+
+        return $this->render('rekapbulanan', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'rekap' => $rekap,
+        ]);
+    }
+
+    public function actionCetakKasusBulanan($bulan, $tahun)
+    {
+        $searchModel = new TKasusSearch();
+
+        $searchModel->tahun = Yii::$app->request->get('tahun', date('Y'));
+        $searchModel->bulan = Yii::$app->request->get('bulan', date('m'));
+
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $rekap = TKasus::find()
+            ->where(['month(tanggal_pelaporan)' => $searchModel->bulan])
+            ->andWhere(['year(tanggal_pelaporan)' => $searchModel->tahun])
+            ->all();
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        Yii::$app->response->headers->add('Content-Type', 'application/pdf');
+
+        return $this->renderPartial('_cetakkasusbulan', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'rekap' => $rekap,
+
+        ]);
+    }
+
+    public function actionRekapKasusTahunan()
+    {
+        $searchModel = new TKasusSearch();
+
+        $searchModel->tahun = Yii::$app->request->get('tahun', date('Y'));
+
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $rekap = TKasus::find()
+            ->where(['year(tanggal_pelaporan)' => $searchModel->tahun])
+            ->all();
+
+        return $this->render('rekaptahunan', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'rekap' => $rekap,
+        ]);
+    }
+
+    public function actionCetakKasusTahunan($tahun)
+    {
+        $searchModel = new TKasusSearch();
+
+        $searchModel->tahun = Yii::$app->request->get('tahun', date('Y'));
+        // $searchModel->bulan = Yii::$app->request->get('bulan', date('m'));
+
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $rekap = TKasus::find()
+            ->where(['year(tanggal_pelaporan)' => $searchModel->tahun])
+            ->all();
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        Yii::$app->response->headers->add('Content-Type', 'application/pdf');
+
+        return $this->renderPartial('_cetakkasustahun', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'rekap' => $rekap,
+
+        ]);
+    }
     // public function actionCreate()
     // {
     //     $model = new TKasus();
@@ -119,7 +207,7 @@ class TKasusController extends Controller
     //             $model -> status_kasus = 1; //status = 1 berarti diproses
 
     //             $model->save();
-                
+
     //             return $this->redirect(['view', 'id_kasus' => $model->id_kasus]);
     //         }
     //     } else {
@@ -194,9 +282,30 @@ class TKasusController extends Controller
         $model = $this->findModel($id_kasus);
 
         return $this->renderPartial('report_kasus', [
-            'model'=> $model,
+            'model' => $model,
         ]);
     }
+
+    //
+    //
+    //
+
+    // public function actionCetakKasusBulanan($bulan, $tahun) // karena kita menampilkan nya berdasarkan media dan tanggal
+    // {
+    //     $model = TKasus::find()
+    //         ->where(['month(tanggal)' => $bulan])
+    //         ->andWhere(['year(tanggal)' => $tahun])
+    //         ->all();
+
+    //     // Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+    //     // Yii::$app->response->headers->add('Content-Type', 'application/pdf');
+
+    //     return $this->renderPartial('_cetakkasusbulan', [
+    //         'model' => $model,
+    //     ]);
+    // }
+
+
 
     /**
      * Finds the TKasus model based on its primary key value.

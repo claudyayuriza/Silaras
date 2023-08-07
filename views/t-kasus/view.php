@@ -8,7 +8,7 @@ use yii\widgets\DetailView;
 
 // $this->title = $model->no_register;
 $this->title = 'Detail Kasus';
-$this->params['breadcrumbs'][] = ['label' => 'T Kasus', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Kasus', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -23,22 +23,22 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="card-tools">
                 <!-- <= Html::a('<i class="fa fa-fw fa-sign-out-alt"></i> Selesaikan Proses', ['selesai', 'id_kasus' => $model->id_kasus], ['class' => 'btn btn-warning']) ?> -->
                 <?php
-                    $selesai = $model->status_kasus;
-                        if ($model->status_kasus == 1) {
-                            $tombol = Html::a('<i class="fa fa-fw fa-sign-out-alt"></i> Selesaikan Proses', ['selesai', 'id_kasus' => $model->id_kasus], ['class' => 'btn btn-warning']);
-                        }elseif ($model->status_kasus == 2) {
-                            $tombol = Html::a('<i class="fa fa-fw fa-sign-out-alt"></i> Report Kasus', ['report', 'id_kasus' => $model->id_kasus], ['class' => 'btn btn-info']);
-                        }else{
-                            $tombol = '';
-                        }
+                $selesai = $model->status_kasus;
+                if ($model->status_kasus == 1) {
+                    $tombol = Html::a('<i class="fa fa-fw fa-sign-out-alt"></i> Selesaikan Proses', ['selesai', 'id_kasus' => $model->id_kasus], ['class' => 'btn btn-warning']);
+                } elseif ($model->status_kasus == 2) {
+                    $tombol = Html::a('<i class="fa fa-fw fa-sign-out-alt"></i> Report Kasus', ['report', 'id_kasus' => $model->id_kasus], ['class' => 'btn btn-info']);
+                } else {
+                    $tombol = '';
+                }
 
-                        echo $tombol;
+                echo $tombol;
                 ?>
                 <?= Html::a('<i class="fa fa-fw fa-pen"></i> Update', ['update', 'id_kasus' => $model->id_kasus], ['class' => 'btn btn-primary']) ?>
                 <?= Html::a('<i class="fa fa-fw fa-trash"></i> Delete', ['delete', 'id_kasus' => $model->id_kasus], [
                     'class' => 'btn btn-danger',
                     'data' => [
-                        'confirm' => 'Are you sure you want to delete this item?',
+                        'confirm' => 'Yakin Ingin Menghapus Data Kasus ?',
                         'method' => 'post',
                     ],
                 ]) ?>
@@ -55,14 +55,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <!-- <td><= $model->status_kasus ?></td> -->
                                     <td>
                                         <?php
-                                         $stakas = $model->status_kasus;
-                                            if ($stakas == 1) {
-                                                $stakas = '<span class="badge badge-warning">Diproses</span>';
-                                            } elseif ($stakas == 2) {
-                                                $stakas = '<span class="badge badge-success">Selesai</span>';
-                                            } else {
-                                                $stakas = '';
-                                            } 
+                                        $stakas = $model->status_kasus;
+                                        if ($stakas == 1) {
+                                            $stakas = '<span class="badge badge-warning">Diproses</span>';
+                                        } elseif ($stakas == 2) {
+                                            $stakas = '<span class="badge badge-success">Selesai</span>';
+                                        } else {
+                                            $stakas = '';
+                                        }
                                         echo $stakas;
                                         ?>
                                     </td>
@@ -71,10 +71,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><b>Tanggal Kejadian</b></td>
                                     <!-- <td><= $model->tanggal_kejadian ?></td> -->
                                     <td>
-                                        <?php 
-                                            $tgl_kjd = $model->tanggal_kejadian;
-                                            $tanggal_indo = $model->tglIndo($tgl_kjd);
-                                            echo $tanggal_indo;
+                                        <?php
+                                        $tgl_kjd = $model->tanggal_kejadian;
+                                        $tanggal_indo = $model->tglIndo($tgl_kjd);
+                                        echo $tanggal_indo;
                                         ?>
                                     </td>
                                 </tr>
@@ -82,10 +82,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><b>Tanggal Pelaporan</b></td>
                                     <!-- <td><= $model->tanggal_pelaporan ?></td> -->
                                     <td>
-                                        <?php 
-                                            $tgl_plrn = $model->tanggal_pelaporan;
-                                            $tanggal_indo = $model->tglIndo($tgl_plrn);
-                                            echo $tanggal_indo;
+                                        <?php
+                                        $tgl_plrn = $model->tanggal_pelaporan;
+                                        $tanggal_indo = $model->tglIndo($tgl_plrn);
+                                        echo $tanggal_indo;
                                         ?>
                                     </td>
                                 </tr>
@@ -97,9 +97,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><b>Kategori Kasus</b></td>
                                     <!-- <td><= $model->kategori_kasus ?></td> -->
                                     <td>
-                                        <?php 
-                                            $kategori_kasus = $model->kategori ? $model->kategori->nama_kategori: '-';
-                                            echo $kategori_kasus;
+                                        <?php
+                                        $kategori_kasus = $model->kategori ? $model->kategori->nama_kategori : '-';
+                                        echo $kategori_kasus;
                                         ?>
                                     </td>
                                 </tr>
@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-md-6">
                         <table class="table table-bordered">
                             <tbody>
-                                
+
                                 <tr>
                                     <td><b>TKP</b></td>
                                     <td><?= $model->tkp ?></td>
@@ -131,14 +131,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= $model->kab_kota ?></td>
                                 </tr>
                                 <tr>
-                                    <td><b>Pelayanan</b></td>
-                                    <td><?= $model-> pelayanan?></td>
+                                    <td><b>Pelayanan yang Diberikan </b></td>
+                                    <td><?= $model->pelayanan ?></td>
                                 </tr>
                                 <tr>
                                     <td><b>Deskripsi Pelayanan</b></td>
                                     <td><?= $model->deskripsi_pelayanan ?></td>
                                 </tr>
-                                
+
                                 <!-- <tr>
                                     <td><b>update_at</b></td>
                                     <td><= $model->update_at ?></td>
@@ -155,9 +155,9 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-                    
 
-    <!-- ?= DetailView::widget([
+
+<!-- ?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id_kasus',

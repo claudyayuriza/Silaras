@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+
 use yii\helpers\ArrayHelper;
 
 use Yii;
@@ -36,11 +37,13 @@ class TKasus extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $bulan;
+    public $tahun;
     public function rules()
     {
         return [
             [['no_register', 'tanggal_kejadian', 'tanggal_pelaporan', 'deskripsi_kasus', 'kategori_kasus', 'tkp', 'desa_kelurahan', 'kab_kota', 'status_kasus'], 'required'],
-            [['tanggal_kejadian', 'tanggal_pelaporan', 'create_at', 'update_at'], 'safe'],
+            [['tanggal_kejadian', 'tanggal_pelaporan', 'create_at', 'update_at', 'bulan', 'tahun'], 'safe'],
             [['deskripsi_kasus', 'deskripsi_pelayanan'], 'string'],
             [['kategori_kasus', 'status_kasus', 'create_by', 'update_by'], 'integer'],
             [['pelayanan'], 'string', 'max' => 100],
@@ -67,37 +70,38 @@ class TKasus extends \yii\db\ActiveRecord
             'status_kasus' => 'Status Kasus',
             'pelayanan' => 'Pelayanan',
             'deskripsi_pelayanan' => 'Deskripsi Pelayanan',
-            'create_at' => 'Creat At',
+            'create_at' => 'Dibuat pada',
             'update_at' => 'Update At',
-            'create_by' => 'Create By',
+            'create_by' => 'Dibuat oleh',
             'update_by' => 'Update By',
         ];
     }
 
-    public function tglIndo($tanggal)
+    public function tglIndo($tanggal_kejadian)
     {
         $bulan = array(
             1 => 'Januari',
-                'February',
-                'Maret',
-                'April',
-                'Mei',
-                'Juni', 
-                'Juli',
-                'Agustus', 
-                'September',
-                'Oktober',
-                'November',
-                'Desember',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember',
         );
 
-        $pecahkan = explode('-', $tanggal);
+        $pecahkan = explode('-', $tanggal_kejadian);
 
         return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
     }
 
-    public function getTampilTanggalnRegister(){
-        return 'Tgl Lapor: '.date('d-m-Y', strtotime($this->tanggal_pelaporan)). ' No. Reg: ('.$this->no_register.')';
+    public function getTampilTanggalnRegister()
+    {
+        return 'Tgl Lapor: ' . date('d-m-Y', strtotime($this->tanggal_pelaporan)) . ' No. Reg: (' . $this->no_register . ')';
     }
 
     public function getdatakasus()
@@ -113,10 +117,38 @@ class TKasus extends \yii\db\ActiveRecord
 
     public function getdatakorban()
     {
-        return $this->hasOne(TKorban::className(),['id_kasus'=>'id_kasus']);
+        return $this->hasOne(TKorban::className(), ['id_kasus' => 'id_kasus']);
     }
 
-    public function getKategori(){
-        return $this->hasOne(Kategori::className(),['id_kategori'=>'kategori_kasus']);
+    public function getKategori()
+    {
+        return $this->hasOne(Kategori::className(), ['id_kategori' => 'kategori_kasus']);
+    }
+    public function generatePendaftaran()
+    {
+        $_first = "01";
+        $regFormat1 = 'P2TP2A';
+        $regFormat2 = 'PA';
+        $regBulan = date('m');
+        $regTahun = date('Y');
+        $_len = strlen($_first); //panjang karakter
+        // $kodePendaftaran = $regHuruf.$regBulan.$regTahun.$_first;
+        $kodePendaftaran = $_first . '/' . $regFormat1 . '/' . $regFormat2 . '/' . $regBulan . '/' . $regTahun;
+
+        $last_kode = $this->find()
+            ->where(['left(no_register,' . $_len . ')' => $_first])
+            ->orderBy(['no_register' => SORT_DESC])
+            ->one();
+
+        if ($last_kode != null) {
+            $_no = substr($last_kode['no_register'], $_len);
+            $_no++;
+            $_no = substr("00000", strlen($_no)) . $_no;
+            $kodePendaftaran = $_first . $_no;
+        }
+
+        if ($this->isNewRecord) {
+            return $kodePendaftaran;
+        }
     }
 }

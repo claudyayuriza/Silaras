@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\TKorban;
@@ -77,5 +78,22 @@ class TKorbanSearch extends TKorban
             ->andFilterWhere(['like', 'no_hp', $this->no_hp]);
 
         return $dataProvider;
+    }
+
+    public function TotalKorbanbyYear()
+    {
+        $tahun = date('Y');
+
+        $sql = "
+        SELECT
+            SUM(CASE WHEN jenis_kelamin=1 THEN 1 ELSE 0 END) as 'Laki-Laki',
+            SUM(CASE WHEN jenis_kelamin=2 THEN 1 ELSE 0 END) as 'Perempuan'
+        FROM t_korban
+        LEFT JOIN t_kasus ON t_kasus.id_kasus = t_korban.id_kasus
+        WHERE year(tanggal_pelaporan)=$tahun
+        GROUP BY t_korban.jenis_kelamin;
+        ";
+        $data = Yii::$app->db->createCommand($sql)->queryOne();
+        return $data;
     }
 }

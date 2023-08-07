@@ -20,10 +20,10 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                // 'only' => ['logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        // 'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -60,8 +60,19 @@ class SiteController extends Controller
      * @return string
      */
     public function actionIndex()
+    { {
+            $roleName = Yii::$app->user->identity->role->name;
+            if ($roleName == 'User') {
+                return $this->redirect(['index-reg']);
+            } elseif ($roleName == 'Admin') {
+                return $this->render('index');
+            }
+        }
+    }
+
+    public function actionIndexReg()
     {
-        return $this->render('index');
+        return $this->render('index_reg');
     }
 
     /**

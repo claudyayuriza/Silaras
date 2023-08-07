@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\TKasus;
@@ -14,11 +15,13 @@ class TKasusSearch extends TKasus
     /**
      * {@inheritdoc}
      */
+    public $bulan;
+    public $tahun;
     public function rules()
     {
         return [
             [['id_kasus', 'kategori_kasus', 'status_kasus', 'create_by', 'update_by'], 'integer'],
-            [['no_register', 'tanggal_kejadian', 'tanggal_pelaporan', 'deskripsi_kasus', 'tkp', 'desa_kelurahan', 'kab_kota', 'create_at', 'update_at'], 'safe'],
+            [['no_register', 'tanggal_kejadian', 'tanggal_pelaporan', 'deskripsi_kasus', 'tkp', 'desa_kelurahan', 'kab_kota', 'create_at', 'update_at', 'bulan', 'tahun'], 'safe'],
         ];
     }
 
@@ -67,14 +70,37 @@ class TKasusSearch extends TKasus
             'update_at' => $this->update_at,
             'create_by' => $this->create_by,
             'update_by' => $this->update_by,
+            'bulan' => $this->bulan,
+            'tahun' => $this->tahun,
         ]);
 
         $query->andFilterWhere(['like', 'no_register', $this->no_register])
             ->andFilterWhere(['like', 'deskripsi_kasus', $this->deskripsi_kasus])
+            ->andFilterWhere(['like', 'pelayanan', $this->pelayanan])
+            ->andFilterWhere(['like', 'deskripsi_pelayanan', $this->deskripsi_pelayanan])
             ->andFilterWhere(['like', 'tkp', $this->tkp])
             ->andFilterWhere(['like', 'desa_kelurahan', $this->desa_kelurahan])
             ->andFilterWhere(['like', 'kab_kota', $this->kab_kota]);
 
         return $dataProvider;
+    }
+
+    public function TotalKasusbyYear()
+    {
+        $tahun = date('Y');
+
+        $sql = "
+        SELECT nama_kategori, ifnull(jumlahkasus,0) as jumlahkasus
+        FROM kategori
+        LEFT JOIN (
+            SELECT kategori_kasus, COUNT(*) as jumlahkasus
+            FROM t_kasus
+            WHERE year(tanggal_pelaporan)=$tahun
+            GROUP BY kategori_kasus
+            ) kasus ON kasus.kategori_kasus = kategori.id_kategori
+        
+        ";
+        $data = Yii::$app->db->createCommand($sql)->queryAll();
+        return $data;
     }
 }

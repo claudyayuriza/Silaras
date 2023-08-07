@@ -7,8 +7,8 @@ use yii\widgets\DetailView;
 /** @var app\models\TPelaku $model */
 
 // $this->title = $model->id_pelaku;
-$this->title = $model->nama_pelaku;
-$this->params['breadcrumbs'][] = ['label' => 'T-Pelaku', 'url' => ['index']];
+$this->title = 'Detail Data Pelaku';
+$this->params['breadcrumbs'][] = ['label' => 'Data Pelaku', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -18,14 +18,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="card card-outline card-info">
         <div class="card-header">
-            <p class="card-title" style="font-size: 20px;">Data T-Pelaku</p>
+            <p class="card-title" style="font-size: 20px;">Nama Pelaku: <b><?= $model->nama_pelaku ?></b></p>
             <!-- <h3 class="card-title">Data Kasus</h3> -->
             <div class="card-tools">
                 <?= Html::a('<i class="fa fa-fw fa-pen"></i> Update', ['update', 'id_pelaku' => $model->id_pelaku], ['class' => 'btn btn-info']) ?>
                 <?= Html::a('<i class="fa fa-fw fa-trash"></i> Delete', ['delete', 'id_pelaku' => $model->id_pelaku], [
                     'class' => 'btn btn-danger',
                     'data' => [
-                        'confirm' => 'Are you sure you want to delete this item?',
+                        'confirm' => 'Yakin akan menghapus data pelaku ?',
                         'method' => 'post',
                     ],
                 ]) ?>
@@ -39,40 +39,60 @@ $this->params['breadcrumbs'][] = $this->title;
                         <table class="table table-bordered">
                             <tbody>
                                 <tr>
-                                    <td><b>Id Pelaku</b></td>
-                                    <td><?= $model->id_pelaku ?></td>
+                                    <td><b>Tgl Lapor/Register Kasus</b></td>
+                                    <td>
+                                        <?php
+                                        $tgllapor = $model->datakasus ? $model->datakasus->tanggal_pelaporan : '-';
+                                        $tglindolapor = $model->tglIndo($tgllapor);
+                                        $register = $model->datakasus ? $model->datakasus->no_register : '-';
+                                        echo $tglindolapor . ' - ' . $register;
+                                        ?>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><b>NIK</b></td>
                                     <td><?= $model->nik ?></td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td><b>Nama</b></td>
-                                    <td><?= $model->nama_pelaku ?></td>
-                                </tr>
-                                <tr>
-                                    <td><b>No Registrasi Kasus</b></td>
-                                    <td>
-                                        <?php
-                                            $register = $model->datakasus ? $model->datakasus->no_register : '-';
-                                            echo $register;
-                                        ?>
-                                    </td>
-                                </tr>
+                                    <td><= $model->nama_pelaku ?></td>
+                                </tr> -->
                                 <tr>
                                     <td><b>Tempat Lahir</b></td>
-                                    <td><?= $model->tempat_lahir_pelaku ?></td>
-                                </tr>
-                                <tr>
-                                    <td><b>Tanggal Lahir</b></td>
-                                    <td>
-                                        <?php 
-                                            $tgl_lhr = $model->tanggal_lahir_pelaku;
-                                            $tanggal_indo = $model->tglIndo($tgl_lhr);
-                                            echo $tanggal_indo;
+                                    <td><?php
+                                        $tmptlhr = $model->tempat_lahir_pelaku;
+                                        $tgl_lhr = $model->tanggal_lahir_pelaku;
+                                        $tanggal_indo = $model->tglIndo($tgl_lhr);
+                                        echo $tmptlhr . ', ' . $tanggal_indo;
                                         ?>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><b>Jenis Kelamin</b></td>
+                                    <td>
+                                        <?php
+                                        $jk = $model->jenis_kelamin_pelaku;
+                                        if ($jk == 1) {
+                                            $jk = 'Laki-laki';
+                                        } elseif ($jk == 2) {
+                                            $jk = 'Perempuan';
+                                        } else {
+                                            $jk = '';
+                                        }
+                                        echo $jk;
+                                        ?>
+                                    </td>
+                                </tr>
+                                <!-- <tr>
+                                    <td><b>Tanggal Lahir</b></td>
+                                    <td>
+                                        <php
+                                        $tgl_lhr = $model->tanggal_lahir_pelaku;
+                                        $tanggal_indo = $model->tglIndo($tgl_lhr);
+                                        echo $tanggal_indo;
+                                        ?>
+                                    </td>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -80,25 +100,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <table class="table table-bordered">
                             <tbody>
                                 <tr>
-                                    <td><b>Jenis Kelamin</b></td>
-                                    <td>
-                                    <?php
-                                         $jk = $model->jenis_kelamin_pelaku;
-                                            if ($jk == 1) {
-                                                $jk = 'Laki-laki';
-                                            } elseif ($jk == 2) {
-                                                $jk = 'Perempuan';
-                                            } else {
-                                                $jk = '';
-                                            } 
-                                        echo $jk;
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td><b>Agama</b></td>
                                     <td>
-                                    <?php
+                                        <?php
                                         $ag = $model->agama_pelaku;
                                         if ($ag == 1) {
                                             $agama_korban = "Islam";

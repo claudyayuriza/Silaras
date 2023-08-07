@@ -17,7 +17,9 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-sm-3">
-            <?= $form->field($model, 'id_korban') ?>
+            <?php echo $form->field($model, 'nik') ?>
+            <!-- <= $form->field($model, 'nik') ?> -->
+            <!-- <= $form->field($model, 'id_korban') ?> -->
         </div>
         <div class="col-sm-3">
             <?= $form->field($model, 'nama_korban') ?>
@@ -34,30 +36,41 @@ use yii\widgets\ActiveForm;
 
 </div>
 
-    <?php // echo = $form->field($model, 'nik') ?>
+<?php // echo = $form->field($model, 'nik') 
+?>
 
-    <?php // echo = $form->field($model, 'tempat_lahir') ?>
+<?php // echo = $form->field($model, 'tempat_lahir') 
+?>
 
-    <?php // echo = $form->field($model, 'tanggal_lahir') ?>
+<?php // echo = $form->field($model, 'tanggal_lahir') 
+?>
 
-    <?php // echo $form->field($model, 'jenis_kelamin') ?>
+<?php // echo $form->field($model, 'jenis_kelamin') 
+?>
 
-    <?php // echo $form->field($model, 'agama_korban') ?>
+<?php // echo $form->field($model, 'agama_korban') 
+?>
 
-    <?php // echo $form->field($model, 'umur_korban') ?>
+<?php // echo $form->field($model, 'umur_korban') 
+?>
 
-    <?php // echo $form->field($model, 'alamat_korban') ?>
+<?php // echo $form->field($model, 'alamat_korban') 
+?>
 
-    <?php // echo $form->field($model, 'no_hp') ?>
+<?php // echo $form->field($model, 'no_hp') 
+?>
 
-    <?php // echo $form->field($model, 'id_kasus') ?>
+<?php // echo $form->field($model, 'id_kasus') 
+?>
 
-    <?php // echo $form->field($model, 'create_at') ?>
+<?php // echo $form->field($model, 'create_at') 
+?>
 
-    <?php // echo $form->field($model, 'update_at') ?>
+<?php // echo $form->field($model, 'update_at') 
+?>
 
-    <?php // echo $form->field($model, 'create_by') ?>
+<?php // echo $form->field($model, 'create_by') 
+?>
 
-    <?php // echo $form->field($model, 'update_by') ?>
-
-
+<?php // echo $form->field($model, 'update_by') 
+?>

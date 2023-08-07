@@ -1,67 +1,71 @@
+<?php
+
+use yii\helpers\Html;
+use yii\helpers\Url;
+?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-        <img src="<?=$assetDir?>/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light"><b>SILARAS</b></span> 
-        <!-- menampilkan nama proyek yang ada di bagian atas menu -->
+        <center>
+            <?= Html::img(Url::base() . '/img/silarasp.png', ['class' => 'img-responsive', 'width' => 180]); ?>
+        </center>
+
+        <!-- <span class="brand-text font-weight-light">SILARAS</span> -->
     </a>
 
-    <!-- Sidebar, menampilkan nama proyek, nama admin, dan menu menu halaman -->
+    <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="<?=$assetDir?>/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                <?= Html::img(Url::base() . '/img/pariamanlogo1.png', ['class' => 'img-circle elevation-2', 'alt' => 'User Image']); ?>
+
             </div>
             <div class="info">
-                <a href="#" class="d-block">Hafizhatul Husna</a>
-                <!-- menampilkan nama admin nantinya yang berada di atas menu -->
+                <a href="#" class="d-block"><?= Yii::$app->user->isGuest == false ? Yii::$app->user->identity->profile->full_name : 'Guest' ?></a>
             </div>
         </div>
-
-        <!-- SidebarSearch Form -->
-        <!-- href be escaped -->
-        <!-- <div class="form-inline">
-            <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                    </button>
-                </div>
-            </div>
-        </div> -->
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <?php
+            $roleName = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->role->name : '';
+            // echo \hail812\adminlte\widgets\Menu::widget([
+
+            if (Yii::$app->user->isGuest == false && $roleName == 'Admin') {
+                $items = [
+                    ['label' => 'Beranda', 'icon' => 'home', 'url' => ['/site/index']], // menu dashboard, icon nya tachometer-alt
+                    ['label' => 'Data Kasus', 'url' => ['/t-kasus'], 'icon' => ' fa-suitcase'],
+                    ['label' => 'Data Korban', 'url' => ['/t-korban'], 'icon' => ' fa-user-injured'],
+                    ['label' => 'Data Pelaku', 'url' => ['/t-pelaku'], 'icon' => ' fa-user-secret'],
+                    ['label' => 'Kategori Kasus', 'url' => ['/kategori'], 'icon' => ' fa-list-alt'],
+                    [
+                        'label' => 'Rekap Data Kasus',
+                        'icon' => 'folder',
+                        'url' => '#',
+                        // 'badge' => '<span class="right badge badge-info">2</span>',
+                        "items" => [
+                            ['label' => 'Rekap Bulanan', 'url' => ['/t-kasus/rekap-kasus-bulanan'], "icon" => "file-pdf"],
+                            ['label' => 'Rekap Tahunan', 'url' => ['/t-kasus/rekap-kasus-tahunan'], "icon" => "file-pdf"],
+                            ['label' => 'Penandatanganan', 'url' => ['/tandatangan'], "icon" => "file-signature"],
+                        ]
+                    ],
+                    ['label' => 'Manajemen User', 'url' => ['/user/admin'], 'icon' => ' fa-users'],
+                    ['label' => 'Profil User', 'url' => ['/user/profile'], 'icon' => 'user'],
+                    ['label' => 'Info Akun', 'url' => ['/user/account'], 'icon' => 'lock'],
+                ];
+            } else if (Yii::$app->user->isGuest == false && $roleName == 'User') {
+                $items = [
+                    ['label' => 'Beranda', 'icon' => 'home', 'url' => ['/site/index-reg']],
+                    ['label' => 'Data Kasus', 'icon' => 'far fa-briefcase', 'url' => ['/t-kasus']],
+                    ['label' => 'Data Korban', 'icon' => 'fas fa-user-injured', 'url' => ['/t-korban']],
+                    ['label' => 'Data Pelaku', 'icon' => 'fal fa-user-secret', 'url' => ['/t-pelaku']],
+                    ['label' => 'Profil User', 'icon' => 'fa-fw fa-user', 'url' => ['/user/profile']],
+                    ['label' => 'Akun User', 'icon' => 'fa-fw fa-users', 'url' => ['/user/account']],
+                ];
+            }
             echo \hail812\adminlte\widgets\Menu::widget([
-                'items' => [
-                    ['label' => 'Dashboard', 'icon' => 'tachometer-alt'], // menu dashboard, icon nya tachometer-alt
-                    ['label' => 'Korban', 'url' => ['/korban'], 'icon' => ' fa-users'], // menu korban, url nya menuju ke tabel korban, icon nya fa-user
-                    ['label' => 'Kasus', 'url' => ['/kasus'], 'icon' => ' fa-users'],
-                    ['label' => 'Kategori', 'url' => ['/kategori'], 'icon' => ' fa-users'],
-                    ['label' => 'T-Kasus', 'url' => ['/t-kasus'], 'icon' => ' fa-users'],
-                    ['label' => 'T-Korban', 'url' => ['/t-korban'], 'icon' => ' fa-users'],
-                    ['label' => 'T-Pelaku', 'url' => ['/t-pelaku'], 'icon' => ' fa-users'],
-                    // [
-                    //     'label' => 'Starter Pages',
-                    //     'icon' => 'tachometer-alt',
-                    //     'badge' => '<span class="right badge badge-info">2</span>',
-                    //     'items' => [
-                    //         ['label' => 'Active Page', 'url' => ['site/index'], 'iconStyle' => 'far'],
-                    //         ['label' => 'Inactive Page', 'iconStyle' => 'far'],
-                    //     ]
-                    // ],
-                    // ['label' => 'Simple Link', 'icon' => 'th', 'badge' => '<span class="right badge badge-danger">New</span>'],
-                    // ['label' => 'Yii2 PROVIDED', 'header' => true],
-                    // ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
-                    // ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
-                    // ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank'],
-                    // ['label' => 'MULTI LEVEL EXAMPLE', 'header' => true],
-                    // ['label' => 'Level1'],
-                    
-                ],
+                'items' => $items,
             ]);
             ?>
         </nav>
